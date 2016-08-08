@@ -1,0 +1,154 @@
+zoomLevel: 14
+disableInteractions: ["keyboard", "scrollWheelZoom", "boxZoom"]
+
+# In order to see that the map works correctly, when moving, set the following
+# to true and set a lower refreshFrequency
+fakeTravel: false
+refreshFrequency: 2 * 60 * 1000
+
+useFixedTheme: 1
+favoriteMapboxThemes: [
+  "mapbox.b0v97egc"   # woodcut
+  "mapbox.4iecw76a"   # space station
+  "aj.03e9e12d"       # better pencil
+  "mapbox.dark"       # dark theme
+]
+
+default_location: [26.8836669, 75.7347992]
+mapboxCDN: "//api.mapbox.com/mapbox.js/v2.4.0"
+
+command: ""
+
+style: """
+  &
+    z-index: 0
+
+  #mapbox
+    top 0
+    left 0
+    width 100%
+    height 100%
+    position: fixed
+    cursor: default
+    &:after
+      content: ""
+      display: block
+      position: fixed
+      top: 0
+      left: 0
+      height: 100%
+      width: 100%
+      background-color: rgba(0,0,0,0.7)
+      pointer-events: none
+
+  .pulse
+    background #f80
+    border-radius 50%
+    height 14px
+    width 14px
+    position absolute
+    left 50%
+    top 50%
+    margin 11px 0px 0px -12px
+    transform rotateX(55deg)
+    z-index -2
+    &:after
+      content ""
+      border-radius 50%
+      height 40px
+      width 40px
+      position absolute
+      margin -13px 0 0 -13px
+      animation pulsate 1s ease-out
+      animation-iteration-count infinite
+      opacity 0.0
+      box-shadow 0 0 1px 2px #f80
+      animation-delay 1.1s
+
+  @keyframes pulsate
+    0%
+      transform scale(0.1, 0.1)
+      opacity 0.0
+    50%
+      opacity 1.0
+    100%
+      transform scale(1.2, 1.2)
+      opacity 0
+"""
+
+render: -> """
+  <div id='mapbox'></div>
+"""
+
+afterRender: (domEl, _) ->
+  $("head link[rel='stylesheet']").last().after("<link rel='stylesheet' href='#{@mapboxCDN}/mapbox.css' />")
+  $.getScript "#{@mapboxCDN}/mapbox.js", => @updateOrShowMapbox('mapbox')
+
+update: (domEl, _) ->
+  return unless L?.mapbox?
+  @updateOrShowMapbox 'mapbox'
+
+updateOrShowMapbox: (el) ->
+  _lat = parseFloat $("#mapbox").attr("data-lat")
+  _lon = parseFloat $("#mapbox").attr("data-lon")
+  @getEnvironmentVariable "MAPBOX_API_TOKEN", (ev) =>
+    L.mapbox.accessToken = ev
+    @getGeoJson (coords, features) =>
+      return if _lat is coords[0] and _lon is coords[1]
+      $("#mapbox").attr("data-lat", coords[0])
+      $("#mapbox").attr("data-lon", coords[1])
+
+      unless @map?
+        @map ||= L.mapbox.map(el, @mapboxTheme(), zoomControl: false, attributionControl: false)
+        @map[interaction].disable() for interaction in @disableInteractions
+
+        geocoder = L.mapbox.geocoderControl('mapbox.places', autocomplete: true, position: "bottomright")
+        geocoder.addTo(@map).on 'found', (res) ->
+          $("##{el}").innerHTML = JSON.stringify(res.results.features[0])
+        geocoder.on 'select', (res) ->
+          $(".leaflet-control-mapbox-geocoder-results a").fadeOut().remove()
+          $(".leaflet-control-mapbox-geocoder-form input").val("")
+        $("leaflet-control-mapbox-geocoder-results a").on 'click', -> e.preventDefault()
+
+        zoomer = L.control.zoom(position: 'bottomright').addTo(@map)
+        @layer = L.mapbox.featureLayer().addTo(@map)
+        @layer.on 'layeradd', (e) -> e.layer.setIcon(L.divIcon(e.layer.feature.properties.icon))
+
+      @map.setView(coords, @zoomLevel)
+      @layer.setGeoJSON features
+
+getGeoJson: (cb) ->
+  @getLocation (coords) =>
+    features = [{
+      type: 'Feature'
+      geometry:
+        type: "Point"
+        coordinates: [coords[1], coords[0]]
+      properties: icon:
+        className: 'map-marker'
+        html: "<div class='pulse'></div>"
+        iconSize: null
+    }]
+    cb(coords, features)
+
+# Get data for the user's current location.
+getLocation: (cb) ->
+  if @fakeTravel
+    _lat = parseFloat($("#mapbox").attr("data-lat")) || @default_location[0]
+    _lon = parseFloat($("#mapbox").attr("data-lon")) || @default_location[1]
+    return cb([_lat + 0.005, _lon + 0.005])
+
+  return cb(@default_location) unless window.hasOwnProperty("geolocation")
+  window.geolocation.getCurrentPosition (data) =>
+    cb(if data then [data.position.coords.latitude, data.position.coords.longitude] else @default_location)
+
+mapboxTheme: ->
+  return @favoriteMapboxThemes[@useFixedTheme - 1] if @useFixedTheme?
+  @favoriteMapboxThemes[Math.floor(Math.random() * @favoriteMapboxThemes.length)]
+
+getEnvironmentVariable: (str, cb) ->
+  @run "zsh -cl 'echo $#{str}'", (stderr, stdout) =>
+    if stderr?
+      console.log "Error retrieving environment variable: #{stderr}"
+    else
+      cb $.trim(stdout)

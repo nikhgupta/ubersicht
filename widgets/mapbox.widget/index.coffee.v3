@@ -1,0 +1,99 @@
+zoomLevel: 14
+
+markerColor: "#0000ff"
+disableInteractions: ["keyboard", "scrollWheelZoom"]
+
+# In order to see that the map works correctly, when moving, set the following
+# to true and set a lower refreshFrequency
+fakeTravel: false
+refreshFrequency: 2 * 60 * 1000
+
+useFixedTheme: 1
+favoriteMapboxThemes: [
+  "mapbox.b0v97egc"   # woodcut
+  "mapbox.4iecw76a"   # space station
+  "aj.03e9e12d"       # better pencil
+  "mapbox.dark"       # dark theme
+]
+
+default_location: [26.8836669, 75.7347992]
+mapboxCDN: "//api.mapbox.com/mapbox.js/v2.4.0"
+
+command: ""
+
+style: """
+  &
+    z-index: 0
+
+  #mapbox
+    top 0
+    left 0
+    width 100%
+    height 100%
+    position: fixed
+    cursor: default
+    .mapbox-logo, .leaflet-bottom, .leaflet-top
+      display none
+    &:after
+      content: ""
+      display: block
+      position: fixed
+      top: 0
+      left: 0
+      height: 100%
+      width: 100%
+      background-color: rgba(0,0,0,0.7)
+      pointer-events: none
+"""
+
+render: -> """
+  <div id='mapbox'></div>
+"""
+
+afterRender: (domEl, _) ->
+  $("head link[rel='stylesheet']").last().after("<link rel='stylesheet' href='#{@mapboxCDN}/mapbox.css' />")
+  $.getScript "#{@mapboxCDN}/mapbox.js", => @updateOrShowMapbox('mapbox')
+
+update: (domEl, _) ->
+  return unless window.L?.mapbox?
+  @updateOrShowMapbox 'mapbox'
+
+updateOrShowMapbox: (el) ->
+  _lat = parseFloat $("#mapbox").attr("data-lat")
+  _lon = parseFloat $("#mapbox").attr("data-lon")
+  @getEnvironmentVariable "MAPBOX_API_TOKEN", (ev) =>
+    L.mapbox.accessToken = ev
+    @getLocation (coords) =>
+      return if _lat is coords[0] and _lon is coords[1]
+      $("#mapbox").attr("data-lat", coords[0])
+      $("#mapbox").attr("data-lon", coords[1])
+
+      @map ||= L.mapbox.map(el, @mapboxTheme())
+      @map.setView(coords, @zoomLevel)
+      @map[interaction].disable() for interaction in @disableInteractions
+      @map.removeLayer(@marker) if @marker?
+      icon = L.mapbox.marker.icon('marker-color': @markerColor)
+      @marker = L.marker(coords, icon: icon).addTo(@map)
+      @marker._icon.style.opacity = 0.5
+
+mapboxTheme: ->
+  return @favoriteMapboxThemes[@useFixedTheme - 1] if @useFixedTheme?
+  @favoriteMapboxThemes[Math.floor(Math.random() * @favoriteMapboxThemes.length)]
+
+getEnvironmentVariable: (str, cb) ->
+  @run "zsh -cl 'echo $#{str}'", (stderr, stdout) =>
+    if stderr?
+      console.log "Error retrieving environment variable: #{stderr}"
+    else
+      cb $.trim(stdout)
+
+# Get data for the user's current location.
+getLocation: (cb) ->
+  if @fakeTravel
+    _lat = parseFloat($("#mapbox").attr("data-lat")) || @default_location[0]
+    _lon = parseFloat($("#mapbox").attr("data-lon")) || @default_location[1]
+    return cb([_lat + 0.005, _lon + 0.005])
+
+  return cb(@default_location) unless window.hasOwnProperty("geolocation")
+  window.geolocation.getCurrentPosition (data) =>
+    cb(if data then [data.position.coords.latitude, data.position.coords.longitude] else @default_location)

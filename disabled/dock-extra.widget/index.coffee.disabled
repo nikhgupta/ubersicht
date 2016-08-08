@@ -1,0 +1,85 @@
+iconColor: "black"
+normalIcons:
+
+  imovie: "open ~/Movies"
+  itunes: "open ~/Music"
+  photos: "open ~/Pictures"
+  appcleaner: "open /Applications"
+  applescript: "open ~/Code"
+  dropbox: "open ~/Dropbox"
+
+  # sep0: ""
+  # "Calendar": "open -a Calendar.app"
+  # reminders_V2: "open -a Reminders.app"
+  # notes: "open -a Notes.app"
+  # "Notability": "open -a SimpleNote.app"
+  # sep1: ""
+  # "Keynote": "open -a Keynote.app"
+  # "Numbers": "open -a Numbers.app"
+  # "Documents_v4": "open ~/Documents"
+  # "pages": "open -a pages.app"
+  # sep2: ""
+  # safari_solid_v2: "open -a Safari.app"
+  # appstore: "open -a 'App Store.app'"
+
+  # sep3: ""
+  # bluetoothfileexchange: "open -a 'Bluetooth File Exchange.app'"
+  # "AirportUtility": "open -a 'Airport Utility.app'"
+  # "AndroidFileTransfer": "open -a 'Android File Transfer.app'"
+  # diskutility: "open -a 'Disk Utility.app'"
+  # systeminformation: "open -a 'System Information.app'"
+
+  sep4: ""
+  github: "open 'https://github.com/nikhgupta'"
+  "Facebook_V2": "open 'https://facebook.com/nikhgupta'"
+
+command: ""
+refreshFrequency: false
+
+iconHtml: (icon) -> "<li class='button' data-icon='#{icon}'><img src='__icons/#{@iconColor}/PNG/#{icon}.png' /></li>"
+
+render: -> """
+  <ul class="dock-list #{@iconColor}-list">
+    #{( @iconHtml(icon) for icon, command of @normalIcons ).join("")}
+  </ul>
+"""
+
+afterRender: (domEl) ->
+  self = @
+  for icon, command of @normalIcons
+    $(domEl).on 'click', "[data-icon='#{icon}']", ->
+      self.run "#{self.normalIcons[$(@).data('icon')]}"
+
+  $(domEl).find("[data-icon]").on 'click', ->
+    $(@).addClass "clicked"
+    setTimeout ( => $(@).removeClass 'clicked'), 1600
+
+style: """
+  ul
+    position: fixed
+    top: 0px
+    left: 40%
+    width: auto
+    height: auto
+    transform: translate(-36%,0)
+
+  img
+    height: 48px
+
+  .button
+    display: inline-block
+
+  .button.clicked
+    animation: bounce 1.2s ease-out
+
+  .button[data-icon^="sep"] img
+    width: 0
+    padding: 0 12px
+
+  ul.black-list .button[data-icon^="sep"] img { width: 2px }
+
+  @keyframes bounce
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-30px); }
+    60% { transform: translateY(-15px); }
+"""

@@ -1,0 +1,93 @@
+# Author: Nikhil Gupta
+# Package: Ubersicht
+#
+# Ubersicht widget that displays a wallpaper with your current location marked.
+#
+# You can choose a single style by setting up 'mapboxTheme', or otherwise set
+# 'mapboxThemes' to choose a random theme from that list.
+#
+# You can, also, set the zoom level, marker and dimensions for the map. Widget
+# refreshes itself every minute (intelligently) - it does not flickers the
+# displayed map or calls up the Mapbox API if there is no transition in the
+# user location.
+#
+zoomLevel: 15
+wallpaperWidth: 1440
+wallpaperHeight: 900
+
+marker: "pin-s-marker+ff0000"
+mapboxTheme: "aj.03e9e12d"
+
+mapboxThemes: [
+  "mapbox.b0v97egc"   # woodcut
+  "mapbox.4iecw76a"   # space station
+  "aj.03e9e12d"       # better pencil
+  "mapbox.dark"       # dark theme
+]
+
+command: ""
+refreshFrequency: 60 * 1000
+
+style: """
+  width: 100vw
+  height: 100vh
+
+  #mapbox
+    width 100%
+    height 100%
+    z-index: -10
+    position: fixed
+
+  #mapbox-overlay
+    width 100%
+    height 100%
+    position: fixed
+    background-color: rgba(0,0,0,0.7)
+    z-index: -5
+"""
+
+render: -> """
+  <div id='mapbox' data-lat="" data-lon=""></div>
+  <div id='mapbox-overlay'></div>
+"""
+
+update: (domEl, _) ->
+  maxDim = if @wallpaperWidth > @wallpaperHeight then @wallpaperWidth else @wallpaperHeight
+  width  = @wallpaperWidth  / maxDim * 1280
+  height = @wallpaperHeight / maxDim * 1280
+  theme  = if @mapboxTheme? then @mapboxTheme else @mapboxThemes[Math.floor(Math.random() * @mapboxThemes.length)]
+
+  @run "zsh -cl 'echo $MAPBOX_API_TOKEN'", (err, env_var) =>
+    if err?
+      console.log "Error retrieving env var: #{err}"
+    else
+      prev_lat = parseFloat $("#mapbox").attr("data-lat")
+      prev_lon = parseFloat $("#mapbox").attr("data-lon")
+      @getLocation (e) =>
+        curr_lat = e.position.coords.latitude
+        curr_lon = e.position.coords.longitude
+        queryUrl  = "https://api.mapbox.com/v4/#{theme}/#{@marker}(#{curr_lon},#{curr_lat})/"
+        queryUrl += "#{curr_lon},#{curr_lat},#{@zoomLevel}/#{width}x#{height}"
+        queryUrl += "@2x.png?access_token=#{$.trim env_var}"
+
+        unless prev_lat is curr_lat and prev_lon is curr_lon
+          $("#mapbox").attr("data-lat", curr_lat)
+          $("#mapbox").attr("data-lon", curr_lon)
+          $("#mapbox").css("background", "url('#{queryUrl}') no-repeat center center")
+
+# Get data for the user's current location.
+getLocation: (cb) =>
+  default_loc =
+    position: coords:
+      latitude:  26.8836669
+      longitude: 75.7347992
+      accuracy:  63
+    address:
+      city:    'Jaipur'
+      country: 'India'
+
+  if window.hasOwnProperty("geolocation")
+    window.geolocation.getCurrentPosition (data) =>
+      cb(if data then data else default_loc)
+  else
+    cb(default_loc)
