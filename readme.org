@@ -1,6 +1,6 @@
 * Ubersicht Widgets
 
-Note that, I use `CTRL` key as the modifier, as that allows me to even enter
+Note that, I use =CTRL= key as the modifier, as that allows me to even enter
 input inside my widgets. Yes, its a bit cumbersome to enter input into widgets,
 but atleast the functionality is there when I need it. This is specially useful
 with the Mapbox widget, where I can enter the name of a location and get the
@@ -18,12 +18,13 @@ particularly, reserved for opening applications in my setup.
 
 A grid of icons on the desktop that can open any application, run some script,
 or do anything else I want with a sheer click. Some of the scripts include:
-*** Displaying External and Internal IP address along with Proxy being used.
-*** Toggle other Ubersicht widgets
-*** Display realtime output from a terminal command on the Desktop
-*** Open a playlist in iTunes
-*** Show statistics about something in a neat graph format on the Desktop
-*** Lock screen, and so on.
+
+- Displaying External and Internal IP address along with Proxy being used.
+- Toggle other Ubersicht widgets
+- Display realtime output from a terminal command on the Desktop
+- Open a playlist in iTunes
+- Show statistics about something in a neat graph format on the Desktop
+- Lock screen, and so on.
 
 [[./screenshots/grid.png]]
 
