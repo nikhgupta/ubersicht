@@ -52,7 +52,7 @@ disableLocatorControl: false
 # In order to see that the map works correctly, when moving, set the following
 # to true and set a lower refreshFrequency
 fakeTravel: false
-refreshFrequency: 2 * 60 * 1000
+refreshFrequency: 10 * 60 * 1000
 
 # A list of your favorite mapbox themes. If 'useFixedTheme' is set, map will
 # always use that particular theme, or otherwise will randomly choose one on
@@ -332,7 +332,7 @@ style: """
       width 40px
       position absolute
       margin -13px 0 0 -13px
-      animation pulsate 120s ease-out
+      animation pulsate 2s ease-out
       animation-iteration-count infinite
       opacity 0.0
       box-shadow 0 0 1px 2px #000

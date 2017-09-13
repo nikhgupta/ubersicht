@@ -31,3 +31,7 @@
 ::-webkit-scrollbar-corner {
   background-color: transparent;
 }
+
+[data-enabled='false'],[data-enabled='0'] {
+  opacity: 0.6;
+}

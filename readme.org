@@ -42,3 +42,13 @@ The map can be interacted with, as well as has several customization options
 available in it.
 
 [[./screenshots/mapbox.png]]
+
+** Remaining Tasks/Ideas
+
+- Jio Usage details
+- Work related metrics from several sources
+- sidekiq stats
+
+** Icon Sources
+
+- [dock-icons-alt](http://brsev.deviantart.com/art/Token-128429570)

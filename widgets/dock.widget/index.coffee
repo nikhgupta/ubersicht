@@ -1,80 +1,91 @@
-iconColor: "white"
+animation: "tada"
+animationTimeout: 2000
 
-normalIcons:
-  finder:    "open -a Finder.app"
-  "Contacts": "open ~"
-  "Archiver": "open ~/Downloads"
+# You can add scripts to `scripts` folder inside this widget.
+# Commands are run by first changing to this directory. For example, specifying:
+#
+#   { icon: "apple", enabled: 1, script: "open -a Finder.app" }
+#
+# will run:
+#
+#   cd ./dock.widget/scripts; open -a Finder.app
+#
+dockMap: [
+  { icon: "apple",         enabled: 1, script: "open -a Finder.app" }
+  { icon: "home",          enabled: 1, script: "open ~" }
+  { icon: "download",      enabled: 1, script: "open ~/Downloads" }
+  { icon: "envelope",      enabled: 1, script: "open -a Mail.app" }
+  { icon: "chrome",        enabled: 1, script: "open -a 'Google Chrome.app'" }
+  { icon: "skype",         enabled: 1, script: "open -a Skype.app" }
+  { icon: "pencil-square", enabled: 1, script: "open -a VimR.app" }
+  { icon: "play-circle",   enabled: 1, script: "open -a VLC.app" }
+  { icon: "headphones",    enabled: 1, script: "open -a iTunes.app" }
+  { icon: "comments",      enabled: 1, script: "open -a Messages.app" }
+  { icon: "telegram",      enabled: 1, script: "open -a 'Telegram Desktop.app'" }
+  { icon: "video-camera",  enabled: 1, script: "open -a Facetime.app" }
+  { icon: "terminal",      enabled: 1, script: "open -a iTerm.app" }
+  { icon: "clock-o",       enabled: 1, script: "open /System/Library/PreferencePanes/TimeMachine.prefpane" }
+  { icon: "tachometer",    enabled: 1, script: "open -a 'Activity Monitor.app'" }
+  { icon: "book",          enabled: 1, script: "open -a SimpleNote.app" }
+]
 
-  sep1: ""
-  mail:      "open -a Mail.app",
-  chrome_v2: "open -a 'Google Chrome.app'"
-  skype: "open -a Skype.app"
-  textedit: "open -a VimR.app"
-  utorrent: "open -a uTorrent.app"
-  # vlc_v2: "open -a VLC.app"
-  "PopcornTime": "open -a PopcornTime.app"
+# otherIcons:
+  # torrent: "open -a uTorrent.app"
+  # popcorn: "open -a PopcornTime.app"
 
   # dropbox: "open ~/Dropbox"
-  # imovie: "open ~/Movies"
-  # itunes: "open ~/Music"
-  # photos: "open ~/Pictures"
-  # appcleaner: "open /Applications"
-  # applescript: "open ~/Code"
+  # movie: "open ~/Movies"
+  # music: "open ~/Music"
+  # images: "open ~/Pictures"
+  # documents: "open ~/Documents"
+  # apps: "open /Applications"
+  # code: "open ~/Code"
 
-  sep2: ""
-  # "Calendar": "open -a Calendar.app"
-  # reminders_V2: "open -a Reminders.app"
+  # calendar: "open -a Calendar.app"
+  # reminders: "open -a Reminders.app"
   # notes: "open -a Notes.app"
-  photobooth: "open -a Photos.app"
-  googleMusicManager: "open -a iTunes.app"
-  messages_v2: "open -a Messages.app"
-  facetime: "open -a Facetime.app"
-  # "Keynote": "open -a Keynote.app"
-  # "Numbers": "open -a Numbers.app"
-  # "Documents_v4": "open ~/Documents"
-  # "pages": "open -a pages.app"
-  # safari_solid_v2: "open -a Safari.app"
+  # photos: "open -a Photos.app"
+  # keynote: "open -a Keynote.app"
+  # numbers: "open -a Numbers.app"
+  # pages: "open -a pages.app"
+  # safari: "open -a Safari.app"
   # appstore: "open -a 'App Store.app'"
 
-  sep3: ""
-  terminal:  "open -a iTerm.app"
-  timemachine: "open /System/Library/PreferencePanes/TimeMachine.prefpane"
-  activitymonitor: "open -a 'Activity Monitor.app'"
-  # systeminformation: "open -a 'System Information.app'"
+  # system: "open -a 'System Information.app'"
 
-  # bluetoothfileexchange: "open -a 'Bluetooth File Exchange.app'"
+  # bluetooth: "open -a 'Bluetooth File Exchange.app'"
   # diskutility: "open -a 'Disk Utility.app'"
-  # "AirportUtility": "open -a 'Airport Utility.app'"
-  # "AndroidFileTransfer": "open -a 'Android File Transfer.app'"
-  # "Notability": "open -a SimpleNote.app"
+  # wifi: "open -a 'Airport Utility.app'"
+  # android: "open -a 'Android File Transfer.app'"
 
-  # sep4: ""
   # github: "open 'https://github.com/nikhgupta'"
   # facebook: "open 'https://facebook.com/nikhgupta'"
-
-specialIconMap: [ "Drive_External", "Drive_TimeMachine", "Drive_USB2", "trash_empty/full" ]
-requireInputMap: [ "googlemaps" ]
 
 command: ""
 refreshFrequency: false
 
-iconHtml: (icon) -> "<li class='button' data-icon='#{icon}'><img src='__icons/#{@iconColor}/#{icon}.png' /></li>"
+iconHtml: (option) ->
+  "<li class='button' data-icon='#{option.icon}'
+    data-enabled='#{option.enabled}' data-script='#{option.script}'>
+  <i class='fa fa-fw faa-#{@animation} fa-#{option.icon}'></i></li>"
 
 render: -> """
-  <ul class="dock-list #{@iconColor}-list">
-    #{( @iconHtml(icon) for icon, command of @normalIcons ).join("")}
+  <ul class="dock-list">
+    #{( @iconHtml(option) for option in @dockMap ).join("")}
   </ul>
 """
 
 afterRender: (domEl) ->
   self = @
-  for icon, command of @normalIcons
-    $(domEl).on 'click', "[data-icon='#{icon}']", ->
-      self.run "#{self.normalIcons[$(@).data('icon')]}"
-
-  $(domEl).find("[data-icon]").on 'click', ->
-    $(@).addClass "clicked"
-    setTimeout ( => $(@).removeClass 'clicked'), 1600
+  for option in @dockMap
+    $(domEl).on 'click', "[data-icon='#{option.icon}'][data-enabled=1]", ->
+      unless $(@).find('i').hasClass "animated"
+        $(@).find('i').addClass "animated"
+        setTimeout ( => $(@).find('i').removeClass 'animated'), self.animationTimeout
+        setTimeout ( =>
+          mapping = $.grep(self.dockMap, (e) => e.icon == $(@).data('icon'))?[0]
+          self.run "cd ./dock.widget/scripts; #{mapping.script}"
+        ), 500
 
 style: """
   &
@@ -86,23 +97,10 @@ style: """
     height: auto
     transform: translate(-30%,-50%)
 
-  img
-    height: 48px
-
   .button
     display: inline-block
-
-  .button.clicked
-    animation: bounce 1.2s ease-out
-
-  .button[data-icon^="sep"] img
-    width: 0
-    padding: 0 12px
-
-  ul.black-list .button[data-icon^="sep"] img { width: 2px }
-
-  @keyframes bounce
-    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-    40% { transform: translateY(-30px); }
-    60% { transform: translateY(-15px); }
+    .fa
+      color: #efefef
+      font-size: 36px
+      padding: 4px
 """

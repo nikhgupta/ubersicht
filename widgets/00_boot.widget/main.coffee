@@ -18,9 +18,10 @@ style: """
 
 afterRender: (domEl) ->
   styles = [
-    "main.css",
+    "00_boot.widget/main.css",
+    "00_boot.widget/font-awesome-animations.css",
     "__vendor/fonts/oswald.css",
-    "__vendor/css/font-awesome.min.css",
+    "__vendor/font-awesome-4.7.0/css/font-awesome.min.css",
     # "//api.mapbox.com/mapbox.js/v2.2.4/mapbox.css"
     # "__vendor/css/jquery.raty.css",
   ]
