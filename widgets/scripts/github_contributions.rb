@@ -3,4 +3,4 @@
 require 'open-uri'
 
 url = "https://github.com/users/nikhgupta/contributions"
-puts open(url).read
+puts "<div><h3>Github Contributions</h3>#{open(url).read}</div>"

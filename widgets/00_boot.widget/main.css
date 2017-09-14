@@ -77,13 +77,20 @@ i.fa.animated,[data-state="1"] .fa { color: #79a !important; }
   left: 270px;
   display: none;
   box-sizing: border-box;
+  align-items: center;
 }
 #result-area.active { display: block; }
 #result-area.output {
-  font-family: 'Ubuntu Mono', monospace;
   white-space: pre;
+  font-family: 'Ubuntu Mono', monospace;
+}
+#result-area > div {
+  top: 50%;
+  position: relative;
+  transform: translateY(-50%);
 }
 
+#result-area.github { text-align: center; }
 #result-area.github rect.day[fill="#ebedf0"] { fill: rgba(0,0,0,0.4) !important; }
 #result-area.github rect.day:not([fill="#ebedf0"]) { opacity: 0.6 !important; }
 #result-area.github text.wday, #result-area.github text.month {
@@ -93,7 +100,6 @@ i.fa.animated,[data-state="1"] .fa { color: #79a !important; }
 
 .widget {
   box-sizing: border-box;
-  /* background: rgba(255,255,255,0.3); */
 }
 
 .list {

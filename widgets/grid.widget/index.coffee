@@ -24,9 +24,9 @@ gridMap: [
   { icon: "lock",        script: "lock-screen.rb" }
   { icon: "microchip",   script: "show-system-information.rb" }
   { icon: "refresh",     enabled: 1, refresh: "" }
-  { icon: "flickr",      enabled: 1, script: "ruby scripts/background_change.rb backgrounds.widget/flickr-wall.coffee &>/dev/null" }
   { icon: "picture-o",   enabled: 1, timeout: 2000, script: "ruby scripts/background_change.rb" }
   { icon: "braille",     enabled: 1, toggle: "backgrounds.widget/matrix.coffee" }
+  { icon: "flickr",      enabled: 1, script: "ruby scripts/background_change.rb backgrounds.widget/flickr-wall.coffee &>/dev/null" }
 ]
 
 command: ""

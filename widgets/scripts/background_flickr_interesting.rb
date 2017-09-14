@@ -32,15 +32,13 @@ photos = photos.map do |photo|
   { url: url, views: photo["views"].to_i, description: photo["description"]["_content"] }
 end.compact
 
-photos = photos.sort_by{|a| a[:views]}.reverse.take(3) unless r
-url  = photos.sample[:url] rescue nil
+url  = (r ? photos.sample : photos.sort_by{|a| a[:views]}.last)[:url] rescue nil
 path = File.join(flickr_dir, "#{date.strftime("%Y%m%d")}-#{File.basename(url)}") if url
 
 if path && !File.exist?(path)
   FileUtils.mkdir_p(File.dirname(path))
   data = open(url).read rescue nil
-  File.open(path, "wb"){|f| f.puts data} if data
-  path = nil unless data
+  data ? File.open(path, "wb"){|f| f.puts data} : (path = nil)
 end
 
 path ||= Dir.glob(File.join(flickr_dir, "*.jpg")).sample

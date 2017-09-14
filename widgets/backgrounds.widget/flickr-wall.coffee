@@ -6,18 +6,18 @@ render: (output) -> """
 """
 
 update: (output, domEl) ->
-  if output.length > 0
-    img = new Image()
-    $el = $(domEl)
-    img.onload = ->
-      $el.find("div").addClass('old')
-      $div = $("<div class='container' />")
-      $div.css "display": "none", "background-image": "url('#{img.src}')"
-      $div.fadeIn 'slow', -> $el.find("div.old").remove()
-      $div.append($("<div class='shadow' />"))
-      $div.append($("<div class='overlay' />"))
-      $el.append($div)
-    img.src = "images/flickr/#{output}"
+  return if output.length == 0
+  img = new Image()
+  $el = $(domEl)
+  img.onload = ->
+    $el.find("div").addClass('old')
+    $div = $("<div class='container' />")
+    $div.css "display": "none", "background-image": "url('#{img.src}')"
+    $div.fadeIn 'slow', -> $el.find("div.old").remove()
+    $div.append($("<div class='shadow' />"))
+    $div.append($("<div class='overlay' />"))
+    $el.append($div)
+  img.src = "images/flickr/#{output}"
 
 style: """
   position: absolute;
