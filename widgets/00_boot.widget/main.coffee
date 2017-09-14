@@ -39,7 +39,8 @@ afterRender: (domEl) ->
     # toastr.options.timeOut = 0
     toastr.options.closeButton = true
     toastr.options.progressBar = true
-    toastr.options.positionClass = "toast-top-right"
+    toastr.options.newestOnTop = true
+    toastr.options.positionClass = "toast-bottom-right"
 
 style: """
   top     0

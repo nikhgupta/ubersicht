@@ -99,4 +99,7 @@ style: """
 
   .button .fa
     color: #efefef
+
+  ul.list
+    list-style none
 """

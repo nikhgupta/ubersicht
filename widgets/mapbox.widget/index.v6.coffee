@@ -261,7 +261,7 @@ mapboxTheme: ->
 
 style: """
   &
-    z-index: -500
+    z-index: -100
     width 100%
     height 100%
 

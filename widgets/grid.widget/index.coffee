@@ -26,9 +26,8 @@ gridMap: [
   { icon: "linux",       script: "run-kali-on-virtualbox.rb" }
   { icon: "lock",        script: "lock-screen.rb" }
   { icon: "microchip",   script: "show-system-information.rb" }
-  { icon: "user-times",  script: "toggle-self-control.rb" }
+  { icon: "flickr",      enabled: 1, script: "open ~/Pictures/flickr/`date \"+%Y-%m-%d\"`" }
 ]
-
 
 command: ""
 refreshFrequency: false
@@ -98,14 +97,13 @@ abortTasks: ->
 worker: (mapping, el, togglable)->
   command = "cd ./grid.widget/scripts; #{mapping.script}"
   @currentXHR = @run command, (se, so) =>
-    console.log(se, so)
     setTimeout ( -> $(el).find(".fa").removeClass("animated")), @animationTimeout
     if togglable # and !$(@res).hasClass(mapping.icon)
       $(@res).addClass("#{mapping.type} active #{mapping.icon}").html(so)
     else if !togglable
       timeout = if mapping.timeout? then mapping.timeout else 10000
-      toastr.error(se, null, {timeOut: timeout}) if se?
-      toastr.info(so, null, {timeOut: timeout}) if so?
+      toastr.error(se, null, {timeOut: timeout}) if se?.length > 0
+      toastr.info(so, null, {timeOut: timeout}) if so?.length > 0 and !se?.length > 0
 
 style: """
   &
@@ -117,15 +115,13 @@ style: """
     height 200px
     width 200px
 
-  ul
-    margin 0
-    padding 0
-
   .button
     display: inline-block
     background: #fff
     border-radius: 4px
     margin: 4px
+    height: 42px
+    width: 42px
     .fa
       color: #333333
       font-size: 28px

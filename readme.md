@@ -70,3 +70,4 @@ available in it.
 - Jio Usage details
 - Work related metrics from several sources
 - sidekiq stats
+- upload files using transfer.sh?
