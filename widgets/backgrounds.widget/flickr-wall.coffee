@@ -6,6 +6,7 @@ render: (output) -> """
 """
 
 update: (output, domEl) ->
+  console.log(output)
   return if output.length == 0
   img = new Image()
   $el = $(domEl)

@@ -6,7 +6,7 @@ require 'open-uri'
 require 'fileutils'
 
 tolerance  = 50
-flickr_dir = File.join(ENV['HOME'], "Pictures", "flickr")
+FLICKR_DIR = File.join(ENV['HOME'], "Pictures", "flickr")
 
 date = Date.today - rand * 1825 # 5 years
 w, h = ARGV[0].to_f, ARGV[1].to_f
@@ -21,12 +21,13 @@ def fetch_json(url)
   raise data["message"] if data["stat"] == "fail"
   data
 rescue StandardError => e
-  STDERR.puts "[Flickr] #{e.class} - #{e.message} while fetching: #{url}"
-  path = Dir.glob(File.join(flickr_dir, "*.jpg")).sample
+  # STDERR.puts "[Flickr] #{e.class} - #{e.message} while fetching: #{url}"
+  path = Dir.glob(File.join(FLICKR_DIR, "*.jpg")).sample
   puts File.basename(path)
+  exit 0
 end
 
-if path = Dir.glob(File.join(flickr_dir, "#{date.strftime("%Y%m%d")}-*.jpg")).sample
+if path = Dir.glob(File.join(FLICKR_DIR, "#{date.strftime("%Y%m%d")}-*.jpg")).sample
   puts File.basename(path)
   exit 0
 end
@@ -52,7 +53,7 @@ end.compact
 
 path = nil
 photos.sort_by{|a| -a[:views]}.take(10).shuffle.each do |photo|
-  path = File.join(flickr_dir, "#{date.strftime("%Y%m%d")}-#{File.basename(photo[:url])}")
+  path = File.join(FLICKR_DIR, "#{date.strftime("%Y%m%d")}-#{File.basename(photo[:url])}")
   if path && !File.exist?(path)
     FileUtils.mkdir_p(File.dirname(path))
     data = open(photo[:url]).read rescue nil
@@ -60,5 +61,5 @@ photos.sort_by{|a| -a[:views]}.take(10).shuffle.each do |photo|
   end
 end
 
-path ||= Dir.glob(File.join(flickr_dir, "*.jpg")).sample
+path ||= Dir.glob(File.join(FLICKR_DIR, "*.jpg")).sample
 puts File.basename(path)
