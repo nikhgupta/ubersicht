@@ -1,5 +1,5 @@
 command: "ruby scripts/background_flickr_interesting.rb 1400 900"
-refreshFrequency: "10m"
+refreshFrequency: 10 * 60 * 1000
 
 render: (output) -> """
   <div class="flickr-wallpaper"></div>
