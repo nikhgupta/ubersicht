@@ -1,8 +1,8 @@
-command: "ruby ./miscelleneous.widget/scripts/flickr_interesting.rb 1400 900 random"
+command: "ruby ./backgrounds.widget/scripts/earth_view.rb"
 refreshFrequency: "10m"
 
 render: (output) -> """
-  <div class="flickr-wallpaper"></div>
+  <div class="earth-view-wallpaper"></div>
 """
 
 update: (output, domEl) ->
@@ -17,11 +17,11 @@ update: (output, domEl) ->
       $div.append($("<div class='shadow' />"))
       $div.append($("<div class='overlay' />"))
       $el.append($div)
-    img.src = "miscelleneous.widget/flickr/#{output}"
+    img.src = "backgrounds.widget/earth_view/#{output}"
 
 style: """
   position: absolute;
-  z-index: -1000;
+  z-index: -1001;
   left: 0px;
   top: 0px;
   width: 100%;
@@ -51,3 +51,4 @@ style: """
       height: 100%;
       background: rgba(0,0,0,0.6)
 """
+

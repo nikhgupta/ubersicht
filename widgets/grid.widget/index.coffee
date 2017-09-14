@@ -19,7 +19,7 @@ gridMap: [
   { icon: "envelope",    script: "send-mail.rb" }
   { icon: "map-marker",  script: "map-given-location.rb" }
   { icon: "user-secret", script: "ip-address.rb" }
-  { icon: "facebook",    script: "post-to-facebook.rb" }
+  { icon: "picture-o",   enabled: 1, timeout: 1000, script: "ruby change-background.rb" }
   { icon: "sticky-note", script: "take-note.rb" }
   { icon: "headphones",  script: "play-songs.rb" }
   { icon: "bar-chart",   script: "show-financial-or-some-other-stats.rb" }
