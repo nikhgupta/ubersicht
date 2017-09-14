@@ -1,4 +1,4 @@
-command: "ruby ./backgrounds.widget/scripts/flickr_interesting.rb 1400 900 random"
+command: "ruby scripts/background_flickr_interesting.rb 1400 900"
 refreshFrequency: "10m"
 
 render: (output) -> """
@@ -17,7 +17,7 @@ update: (output, domEl) ->
       $div.append($("<div class='shadow' />"))
       $div.append($("<div class='overlay' />"))
       $el.append($div)
-    img.src = "backgrounds.widget/flickr/#{output}"
+    img.src = "images/flickr/#{output}"
 
 style: """
   position: absolute;

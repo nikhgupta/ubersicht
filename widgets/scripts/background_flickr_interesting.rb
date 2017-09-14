@@ -8,11 +8,12 @@ require 'fileutils'
 tolerance  = 50
 flickr_dir = File.join(ENV['HOME'], "Pictures", "flickr")
 
+date  = Date.today - rand * 1825 # 5 years
 w, h, r = ARGV[0].to_f, ARGV[1].to_f, ARGV[2] == "random"
 
 url  = "https://api.flickr.com/services/rest/?format=json&nojsoncallback=1"
 url += "&method=flickr.interestingness.getList&extras=views,url_h,url_k,description"
-url += "&api_key=ec2b72cb5efb5802040fb6516136fbe5&per_page=500"
+url += "&api_key=ec2b72cb5efb5802040fb6516136fbe5&per_page=500&date=#{date}"
 
 photos = JSON.parse(open(url).read)["photos"]["photo"] rescue []
 
@@ -31,20 +32,16 @@ photos = photos.map do |photo|
   { url: url, views: photo["views"].to_i, description: photo["description"]["_content"] }
 end.compact
 
-photo = r ? photos.sample : photos.sort_by{|a| a[:views]}[-1]
+photos = photos.sort_by{|a| a[:views]}.reverse.take(3) unless r
+url  = photos.sample[:url] rescue nil
+path = File.join(flickr_dir, "#{date.strftime("%Y%m%d")}-#{File.basename(url)}") if url
 
-if photo
-  path = File.join(flickr_dir, Date.today.to_s, File.basename(photo[:url]))
-else
-  path = Dir.glob(File.join(flickr_dir, "**", "*.jpg")).sample
-end
-
-return unless path
-
-unless File.exist?(path)
+if path && !File.exist?(path)
   FileUtils.mkdir_p(File.dirname(path))
-  pid = Process.spawn("wget -ct 3 '#{photo[:url]}' -O '#{path}' &>/dev/null")
-  Process.wait pid
+  data = open(url).read rescue nil
+  File.open(path, "wb"){|f| f.puts data} if data
+  path = nil unless data
 end
 
-puts File.join(File.basename(File.dirname(path)),File.basename(path))
+path ||= Dir.glob(File.join(flickr_dir, "*.jpg")).sample
+puts File.basename(path)

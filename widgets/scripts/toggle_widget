@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+
+name = ARGV[0].to_s.gsub(/[^a-zA-Z0-9]/, '-')
+action = ARGV[1].to_s
+
+def hidden?(name)
+  scpt = "tell application \"Übersicht\" to get hidden of widget id \"#{name}\""
+  `osascript -e '#{scpt}'`.strip == "true"
+end
+
+if action.empty?
+  # hide = action.empty? ? !hidden? : action == "hide"
+  script = "tell application \"Übersicht\" to set hidden of widget id \"#{name}\" to #{!hidden?(name)}"
+  `osascript -e '#{script}'`
+end
+
+print !hidden?(name)

@@ -11,22 +11,22 @@ animationTimeout: 2000
 #   cd ./grid.widget/scripts; ruby some-script.rb
 #
 gridMap: [
-  { icon: "wifi",        enabled: 1, script: "ruby ip-address.rb" }
-  { icon: "heartbeat",   enabled: 1, type: "output", refresh: 1000, script: "ruby ip-address.rb" }
-  { icon: "github",      enabled: 1, type: "html",   script: "ruby github-contributions.rb" }
+  { icon: "wifi",        enabled: 0, script: "whoami" }
+  { icon: "heartbeat",   enabled: 0, type: "output", repeat: 1000, script: "whoami" }
+  { icon: "github",      enabled: 1, type: "html",   script: "ruby scripts/github_contributions.rb" }
   { icon: "shield",      script: "toggle-proxy.rb" }
   { icon: "terminal",    script: "output-from-terminal.rb" }
   { icon: "envelope",    script: "send-mail.rb" }
   { icon: "map-marker",  script: "map-given-location.rb" }
-  { icon: "user-secret", script: "ip-address.rb" }
-  { icon: "picture-o",   enabled: 1, timeout: 1000, script: "ruby change-background.rb" }
   { icon: "sticky-note", script: "take-note.rb" }
   { icon: "headphones",  script: "play-songs.rb" }
-  { icon: "bar-chart",   script: "show-financial-or-some-other-stats.rb" }
   { icon: "linux",       script: "run-kali-on-virtualbox.rb" }
   { icon: "lock",        script: "lock-screen.rb" }
   { icon: "microchip",   script: "show-system-information.rb" }
-  { icon: "flickr",      enabled: 1, script: "open ~/Pictures/flickr/`date \"+%Y-%m-%d\"`" }
+  { icon: "refresh",     enabled: 1, refresh: "" }
+  { icon: "flickr",      enabled: 1, script: "ruby scripts/background_change.rb backgrounds.widget/flickr-wall.coffee &>/dev/null" }
+  { icon: "picture-o",   enabled: 1, timeout: 2000, script: "ruby scripts/background_change.rb" }
+  { icon: "braille",     enabled: 1, toggle: "backgrounds.widget/matrix.coffee" }
 ]
 
 command: ""
@@ -38,7 +38,7 @@ res: "#result-area"
 iconHtml: (option) ->
   "<li class='button icon' data-icon='#{option.icon}' data-state='0'
     data-type='#{if option.type? then option.type else ""}'
-    data-enabled='#{option.enabled}' data-refresh='#{option.refresh?}'>
+    data-enabled='#{option.enabled}' data-repeat='#{option.repeat?}'>
     <i class='fa fa-fw faa-#{@animation} fa-#{option.icon}'></i></li>"
 
 render: -> """
@@ -71,6 +71,7 @@ afterRender: (domEl) ->
       self.abortTasks()
     else if !active && !togglable
       $(@).attr("data-state": "0")
+      $(@).find(".fa").toggleClass("fa-active") if mapping.toggle > 0
       self.worker(mapping, @, togglable)
     else if !active
       $(domEl).find(".button").attr("data-state": "0")
@@ -79,9 +80,9 @@ afterRender: (domEl) ->
       $(@).find(".fa").addClass("fa-active")
       $(@).attr("data-state": "1")
       self.abortTasks()
-      if mapping.refresh?
+      if mapping.repeat?
         $(@).find(".fa").addClass("fa-spin")
-        self.currentTimer = setInterval ( => self.worker(mapping, @, togglable)), mapping.refresh
+        self.currentTimer = setInterval ( => self.worker(mapping, @, togglable)), mapping.repeat
       self.worker(mapping, @, togglable)
 
 abortTasks: ->
@@ -95,11 +96,15 @@ abortTasks: ->
 # area, or for other tasks inside a notification.
 #
 worker: (mapping, el, togglable)->
-  command = "cd ./grid.widget/scripts; #{mapping.script}"
-  @currentXHR = @run command, (se, so) =>
+  mapping.script = "./scripts/toggle_widget #{mapping.toggle}" if mapping.toggle
+  mapping.script = "./scripts/refresh_widget #{mapping.refresh}" if mapping.refresh?
+
+  @currentXHR = @run mapping.script, (se, so) =>
     setTimeout ( -> $(el).find(".fa").removeClass("animated")), @animationTimeout
     if togglable # and !$(@res).hasClass(mapping.icon)
       $(@res).addClass("#{mapping.type} active #{mapping.icon}").html(so)
+    else if mapping.toggle
+      $(el).find(".fa")[if so == "true" then "addClass" else "removeClass"]("fa-active")
     else if !togglable
       timeout = if mapping.timeout? then mapping.timeout else 10000
       toastr.error(se, null, {timeOut: timeout}) if se?.length > 0

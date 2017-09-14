@@ -1,4 +1,4 @@
-command: "ruby ./backgrounds.widget/scripts/earth_view.rb"
+command: "ruby scripts/background_earth_view.rb"
 refreshFrequency: "10m"
 
 render: (output) -> """
@@ -17,7 +17,7 @@ update: (output, domEl) ->
       $div.append($("<div class='shadow' />"))
       $div.append($("<div class='overlay' />"))
       $el.append($div)
-    img.src = "backgrounds.widget/earth_view/#{output}"
+    img.src = "images/earth_view/#{output}"
 
 style: """
   position: absolute;
@@ -51,4 +51,3 @@ style: """
       height: 100%;
       background: rgba(0,0,0,0.6)
 """
-

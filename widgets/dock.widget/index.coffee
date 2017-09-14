@@ -84,7 +84,7 @@ afterRender: (domEl) ->
         setTimeout ( => $(@).find('i').removeClass 'animated'), self.animationTimeout
         setTimeout ( =>
           mapping = $.grep(self.dockMap, (e) => e.icon == $(@).data('icon'))?[0]
-          self.run "cd ./dock.widget/scripts; #{mapping.script}"
+          self.run mapping.script
         ), 500
 
 style: """

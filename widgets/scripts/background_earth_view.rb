@@ -28,6 +28,7 @@ url   = "https://" + image["Image URL"]
 path  = File.join(earth_view_dir, get_name(image))
 
 unless File.exist?(path)
+  FileUtils.mkdir_p(File.dirname(path))
   data = open(url).read rescue nil
   File.open(path, "wb"){|f| f.puts data} if data
   path = nil unless data
