@@ -136,7 +136,6 @@ updateOrShowMapbox: (el) ->
   @getEnvironmentVariable "MAPBOX_API_TOKEN", (ev) =>
     L.mapbox.accessToken = ev
     @getGeoJson (coords, features) =>
-      console.log _lat, _lon, _counter, _zoom, coords
       if _lat is coords[0] and _lon is coords[1]
         return unless @enableZoomOut
         zoomLevel = @getZoomLevel(_counter, _zoom)
@@ -150,7 +149,6 @@ updateOrShowMapbox: (el) ->
         $("#mapbox").attr("data-zoom-level", @zoomMaxLevel)
         @setupMapbox(el, coords) unless @map?
         @map.setView(coords, @zoomMaxLevel)
-        console.log features
         @layer.setGeoJSON features
         @map.fitBounds @layer.getBounds().pad(0.5) if @pointsOfInterest?.length > 0
         window.map = @map
@@ -229,7 +227,6 @@ getGeoJson: (cb) ->
 # location specified by the user.
 #
 getLocation: (cb) ->
-  console.log @
   if @fakeTravel
     _lat = parseFloat($("#mapbox").attr("data-lat")) || @default_location[0]
     _lon = parseFloat($("#mapbox").attr("data-lon")) || @default_location[1]
@@ -264,7 +261,7 @@ mapboxTheme: ->
 
 style: """
   &
-    z-index: 0
+    z-index: -1
     width 100%
     height 100%
 

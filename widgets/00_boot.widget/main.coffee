@@ -11,27 +11,20 @@
 command: ""
 refreshFrequency: false
 
-style: """
-  top     0
-  right   0
+render: -> """
+  <div id="result-area"></div>
 """
 
 afterRender: (domEl) ->
   styles = [
+    "node_modules/font-awesome/css/font-awesome.min.css",
+    "node_modules/toastr/build/toastr.min.css",
     "00_boot.widget/main.css",
     "00_boot.widget/font-awesome-animations.css",
-    "__vendor/fonts/oswald.css",
-    "__vendor/font-awesome-4.7.0/css/font-awesome.min.css",
-    # "//api.mapbox.com/mapbox.js/v2.2.4/mapbox.css"
-    # "__vendor/css/jquery.raty.css",
   ]
 
   scripts = [
-    # "__vendor/js/flot/base.js",
-    # "__vendor/js/flot/time.js",
-    # "__vendor/js/jquery.raty.js",
-    # # "__vendor/js/jquery.smooth.js",
-    # "//api.mapbox.com/mapbox.js/v2.2.4/mapbox.js"
+    "node_modules/toastr/build/toastr.min.js",
   ]
 
   for style in styles
@@ -39,5 +32,16 @@ afterRender: (domEl) ->
     $("head link[rel='stylesheet']").last().after(html)
 
   for script in scripts
-    html = "<script src='/#{script}.nouber' type='text/javascript' charset='utf-8'></script>"
+    html = "<script src='/#{script}' type='text/javascript' charset='utf-8'></script>"
     $("body").append(html)
+
+  if toastr?
+    # toastr.options.timeOut = 0
+    toastr.options.closeButton = true
+    toastr.options.progressBar = true
+    toastr.options.positionClass = "toast-top-right"
+
+style: """
+  top     0
+  right   0
+"""

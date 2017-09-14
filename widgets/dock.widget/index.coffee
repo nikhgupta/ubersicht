@@ -1,4 +1,4 @@
-animation: "tada"
+animation: "bounce"
 animationTimeout: 2000
 
 # You can add scripts to `scripts` folder inside this widget.
@@ -66,11 +66,11 @@ refreshFrequency: false
 
 iconHtml: (option) ->
   "<li class='button' data-icon='#{option.icon}'
-    data-enabled='#{option.enabled}' data-script='#{option.script}'>
+    data-enabled='#{option.enabled}'>
   <i class='fa fa-fw faa-#{@animation} fa-#{option.icon}'></i></li>"
 
 render: -> """
-  <ul class="dock-list">
+  <ul class="list dock-list">
     #{( @iconHtml(option) for option in @dockMap ).join("")}
   </ul>
 """
@@ -91,16 +91,12 @@ style: """
   &
     z-index: 1
     position: fixed
-    bottom: 0
-    left: 36%
-    width: auto
+    bottom: 78px
+    left: 240px
+    width: 960px
     height: auto
-    transform: translate(-30%,-50%)
+    text-align center
 
-  .button
-    display: inline-block
-    .fa
-      color: #efefef
-      font-size: 36px
-      padding: 4px
+  .button .fa
+    color: #efefef
 """

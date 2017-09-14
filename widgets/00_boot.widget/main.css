@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Ubuntu+Mono|Oswald:400,700');
+
 .black  { color: rgba(51,51,51,0.8); text-shadow: 1px 1px 1px rgba(0,0,0,0.3) }
 .white  { color: rgba(153,153,153,0.8); text-shadow: 1px 1px 1px rgba(0,0,0,0.3) }
 .darkred {color: rgba(153,51,51,0.8); text-shadow: 1px 1px 1px rgba(0,0,0,0.1) }
@@ -32,6 +34,76 @@
   background-color: transparent;
 }
 
-[data-enabled='false'],[data-enabled='0'] {
-  opacity: 0.6;
+* {
+  font-weight: bold;
+  font-family: "Oswald", Berlin, Helvetica Neue;
+  -webkit-font-smoothing: antialiased;
+}
+
+i.fa.animated,[data-state="1"] .fa { color: #79a !important; }
+.fa.fa-active { color: #39d !important; }
+[data-enabled] { opacity: 0.6; }
+[data-enabled="1"] { opacity: 1.0; }
+[data-type]:not([data-type=""]) { background-color: #f8f8e0 !important; }
+[data-refresh][data-refresh="true"] { background-color: #ffddee !important; }
+
+#toast-container {
+  top: 210px;
+  left: 42px;
+}
+.toast {
+  box-shadow: none !important;
+  /* box-shadow: 0 0 12px #000 !important; */
+  /* border-radius: 0 0 4px 4px !important; */
+  padding: 8px 15px 7px 50px !important;
+  width: 295px !important;
+}
+
+#result-area {
+  width: 800px;
+  height: 640px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #efefef;
+  border-radius: 10px;
+  padding: 20px;
+  position: fixed;
+  top: 50px;
+  left: 360px;
+  display: none;
+}
+#result-area.active { display: block; }
+#result-area.output {
+  font-family: 'Ubuntu Mono', monospace;
+  white-space: pre;
+}
+
+#result-area.github rect.day[fill="#ebedf0"] { fill: rgba(0,0,0,0.4) !important; }
+#result-area.github rect.day:not([fill="#ebedf0"]) { opacity: 0.6 !important; }
+#result-area.github text.wday, #result-area.github text.month {
+  fill: white !important;
+  font-size: 11px !important;
+}
+
+.widget {
+  box-sizing: border-box;
+  /* background: rgba(255,255,255,0.3); */
+}
+
+.list {
+  padding: 0px;
+  margin: 0px;
+}
+
+.list .button {
+  margin: 4px;
+  width: 42px;
+  height: 42px;
+  text-align: center;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.list .button .fa {
+  font-size: 28px !important;
+  padding: 7px 0 !important;
 }

@@ -1,5 +1,6 @@
 widgets/__cache
 widgets/__tmp
+widgets/node_modules
 
 .ropeproject
 

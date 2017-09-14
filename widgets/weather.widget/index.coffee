@@ -64,10 +64,8 @@ getIcon: (data) ->
 render: (_) -> """
   <div id='pretty-weather'>
     <div class='icon info'></div>
-    <p class='meta'>
-      <span class='location'></span> <span class='temp'></span><br/>
-      <span class='summary'></span>
-    </p>
+    <p class='meta'><span class='location'></span> <span class='temp'></span></p>
+    <p class='summary'></p>
   </div>
 """
 
@@ -79,7 +77,7 @@ update: (output, domEl) ->
       if (today = data?.daily?.data[0])?
         date = @getDate today.time
         $(domEl).find("span.temp").text Math.round(today.temperatureMax)+'°'
-        $(domEl).find('span.summary').text today.summary
+        $(domEl).find('p.summary').text today.summary
         $(domEl).find('div.icon').text @getIcon(today)
         $(domEl).find('span.location').show()
         $(domEl).find('span.location').text e.address.city + ", " + e.address.country
@@ -112,23 +110,22 @@ getLocation: (cb) ->
 
 style: """
   &
-    top 0
-    right 0
-    font-family: "Oswald", Berlin, Helvetica Neue
-    color: #fff
+    top 50px
+    right 50px
     width 200px
-    padding 20px
+    height 200px
+    padding 10px
     text-align right
     overflow hidden
-    height 116px
     z-index 1
+    color rgba(255,255,255,0.7)
 
   #pretty-weather
     float right
 
     @font-face
       font-family Weather
-      src url(__vendor/fonts/pretty-weather.svg) format('svg')
+      src url(./weather.widget/pretty-weather.svg) format('svg')
 
     div.icon
       font-family Weather
@@ -140,18 +137,10 @@ style: """
 
     p.meta
       margin 0
-
+      font-size 22px
       span.temp
-        font-size: 20px
-        text-anchor: middle
-        alignment-baseline baseline
+        font-size: 24px
 
       span.summary
-        text-align right
-        padding 12px 0 0
-        margin-top -20px
-        font-size 14px
-        max-width 200px
-        line-height 1.4em
-        alignment-baseline baseline
+        font-size 15px
 """
