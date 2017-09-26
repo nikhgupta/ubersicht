@@ -91,7 +91,7 @@ style: """
   &
     z-index: 1
     position: fixed
-    bottom: 78px
+    bottom: 40px
     left: 240px
     width: 960px
     height: auto

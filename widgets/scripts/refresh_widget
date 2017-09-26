@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-name = ARGV[0].to_s.gsub(/[^a-zA-Z0-9]/, '-')
+name = ARGV[0].to_s.gsub(/[^a-zA-Z0-9_]/, '-')
 
 script  = "tell application \"Übersicht\" to refresh"
 script += " widget id \"#{name}\"" unless name.empty?

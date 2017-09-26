@@ -21,8 +21,9 @@ gridMap: [
   { icon: "sticky-note", script: "take-note.rb" }
   { icon: "headphones",  script: "play-songs.rb" }
   { icon: "linux",       script: "run-kali-on-virtualbox.rb" }
-  { icon: "lock",        script: "lock-screen.rb" }
-  { icon: "microchip",   script: "show-system-information.rb" }
+  # { icon: "lock",        script: "lock-screen.rb" }
+  { icon: "th",          enabled: 1, toggle: "backgrounds.widget/bg_grid.coffee"}
+  { icon: "microchip",   enabled: 1, toggle: "system.widgets/htop.coffee"}
   { icon: "refresh",     enabled: 1, refresh: "" }
   { icon: "picture-o",   enabled: 1, timeout: 2000, script: "ruby scripts/background_change.rb" }
   { icon: "braille",     enabled: 1, toggle: "backgrounds.widget/matrix.coffee" }
@@ -49,6 +50,8 @@ render: -> """
 
 afterRender: (domEl) ->
   self = @
+
+  # make sure to toggle icons as to what is active or inactive
 
   $(domEl).on 'click', '.button[data-enabled="1"]', ->
 
@@ -114,7 +117,7 @@ style: """
   &
     z-index: 1
     position: fixed
-    top: 50px
+    bottom: 50px
     left: 50px
     position: fixed
     height 200px

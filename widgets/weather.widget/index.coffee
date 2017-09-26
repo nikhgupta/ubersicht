@@ -110,11 +110,10 @@ getLocation: (cb) ->
 
 style: """
   &
-    top 50px
-    right 50px
-    width 200px
-    height 200px
-    padding 10px
+    bottom 10px
+    right 10px
+    width 230px
+    padding 0px
     text-align right
     overflow hidden
     z-index 1

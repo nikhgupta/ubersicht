@@ -16,7 +16,7 @@ url += "&method=flickr.interestingness.getList&extras=views,url_h,url_k,descript
 url += "&api_key=#{ENV['FLICKR_KEY']}&date=#{date}&per_page=500"
 
 def fetch_json(url)
-  data = open(url, read_timeout: 20).read
+  data = open(url, open_timeout: 5, read_timeout: 20).read
   data = JSON.parse(data)
   raise data["message"] if data["stat"] == "fail"
   data
@@ -52,14 +52,19 @@ photos = photos.map do |photo|
 end.compact
 
 path = nil
-photos.sort_by{|a| -a[:views]}.take(10).shuffle.each do |photo|
+photos = photos.sort_by{|a| -a[:views]}.take(3)
+
+def get_photo(photo, date)
   path = File.join(FLICKR_DIR, "#{date.strftime("%Y%m%d")}-#{File.basename(photo[:url])}")
   if path && !File.exist?(path)
     FileUtils.mkdir_p(File.dirname(path))
-    data = open(photo[:url]).read rescue nil
-    data ? File.open(path, "wb"){|f| f.puts data} : (path = nil)
+    data = open(photo[:url], open_timeout: 5, read_timeout: 20).read rescue nil
+    File.open(path, "wb"){|f| f.puts data} if data
   end
+  File.basename(path) if path && data
 end
 
+path = get_photo(photos.shift, date) while path.nil?
+# photos.each{|photo| Process.detach(Process.fork{ get_photo(photo, date) })}
 path ||= Dir.glob(File.join(FLICKR_DIR, "*.jpg")).sample
 puts File.basename(path)

@@ -1,0 +1,47 @@
+command: "ruby scripts/sidekiq_chart.rb"
+refreshFrequency: 10*1000
+
+render: -> """
+  <div id="sidekiq-chart" class="line chart">
+    <canvas class="chart-area" width="800" height="510"></canvas>
+  </div>
+"""
+
+afterRender: (domEl) ->
+  ctx = $(domEl).find(".chart-area")
+  datasets = [{ label: "retries",   data: [], fill: false, borderColor: "rgba(255,0,0,0.3)"},
+              { label: "processed", data: [], fill: false, borderColor: "rgba(0,255,0,0.3)"}]
+  data     = { labels: [], datasets: datasets }
+  options  = { scales: { xAxes: [{ display: false }]}}
+  window.chart = new Chart ctx, type: "line", data: data, options: options
+
+update: (output, domEl) ->
+  json = JSON.parse(output)
+  window.chart.data.labels.push(Date.now())
+  window.chart.data.labels = window.chart.data.labels.slice(-60)
+
+  for key, idx in ["retries", "processed"]
+    window["skl_#{key}"] = json[key] unless window["skl_#{key}"]?
+    diff = json[key] - window["skl_#{key}"]
+    window.chart.data.datasets[idx].data.push(diff)
+    window.chart.data.datasets[idx].data = window.chart.data.datasets[idx].data.slice(-60)
+  window.chart.update()
+
+  for key in ["retries", "processed"]
+    window["skl_#{key}"] = json[key]
+
+style: """
+  color: white
+
+  .chart
+    padding 20px
+    height 550px
+    width 840px
+    border-radius: 10px;
+    position: fixed;
+    bottom: 128px;
+    left: 300px;
+    box-sizing: border-box;
+    align-items: center;
+    background rgba(0,0,0,0.6)
+"""
