@@ -25,6 +25,7 @@ afterRender: (domEl) ->
 
   scripts = [
     "node_modules/toastr/build/toastr.min.js",
+    "node_modules/moment/min/moment.min.js",
     "node_modules/chart.js/dist/Chart.min.js",
   ]
 

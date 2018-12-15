@@ -17,16 +17,15 @@ dockMap: [
   { icon: "envelope",      enabled: 1, script: "open -a Mail.app" }
   { icon: "chrome",        enabled: 1, script: "open -a 'Google Chrome.app'" }
   { icon: "skype",         enabled: 1, script: "open -a Skype.app" }
-  { icon: "pencil-square", enabled: 1, script: "open -a VimR.app" }
+  { icon: "pencil-square", enabled: 1, script: "open -a Simplenote.app" }
   { icon: "play-circle",   enabled: 1, script: "open -a VLC.app" }
   { icon: "headphones",    enabled: 1, script: "open -a iTunes.app" }
   { icon: "comments",      enabled: 1, script: "open -a Messages.app" }
-  { icon: "telegram",      enabled: 1, script: "open -a 'Telegram Desktop.app'" }
+  { icon: "slack",         enabled: 1, script: "open -a Slack.app" }
   { icon: "video-camera",  enabled: 1, script: "open -a Facetime.app" }
   { icon: "terminal",      enabled: 1, script: "open -a iTerm.app" }
   { icon: "clock-o",       enabled: 1, script: "open /System/Library/PreferencePanes/TimeMachine.prefpane" }
-  { icon: "tachometer",    enabled: 1, script: "open -a 'Activity Monitor.app'" }
-  { icon: "book",          enabled: 1, script: "open -a SimpleNote.app" }
+  { icon: "heartbeat",     enabled: 1, script: "open -a 'Activity Monitor.app'" }
 ]
 
 # otherIcons:
@@ -91,7 +90,7 @@ style: """
   &
     z-index: 1
     position: fixed
-    bottom: 40px
+    bottom: 80px
     left: 240px
     width: 960px
     height: auto

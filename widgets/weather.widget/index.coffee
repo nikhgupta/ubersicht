@@ -104,13 +104,15 @@ queryForecastApi: (query, callback) ->
 
 # Get data for the user's current location.
 getLocation: (cb) ->
-  return cb(@default_location) unless window.hasOwnProperty("geolocation")
-  window.geolocation.getCurrentPosition (data) =>
+  #return cb(@default_location) unless window.hasOwnProperty("geolocation")
+  window.geolocation?.getCurrentPosition (data) =>
+    console.log("location for weather widget:", data)
     cb(if data then data else @default_location)
+  cb(@default_location)
 
 style: """
   &
-    bottom 10px
+    top 10px
     right 10px
     width 230px
     padding 0px

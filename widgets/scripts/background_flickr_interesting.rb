@@ -6,7 +6,8 @@ require 'open-uri'
 require 'fileutils'
 
 tolerance  = 50
-FLICKR_DIR = File.join(ENV['HOME'], "Pictures", "flickr")
+FLICKR_DIR = File.join(ENV['HOME'], "Pictures", "Ubersicht", "flickr")
+FileUtils.mkdir_p(FLICKR_DIR)
 
 date = Date.today - rand * 1825 # 5 years
 w, h = ARGV[0].to_f, ARGV[1].to_f
@@ -21,7 +22,7 @@ def fetch_json(url)
   raise data["message"] if data["stat"] == "fail"
   data
 rescue StandardError => e
-  # STDERR.puts "[Flickr] #{e.class} - #{e.message} while fetching: #{url}"
+  STDERR.puts "[Flickr] #{e.class} - #{e.message} while fetching: #{url}" if ENV['DEBUG']
   path = Dir.glob(File.join(FLICKR_DIR, "*.jpg")).sample
   puts File.basename(path)
   exit 0

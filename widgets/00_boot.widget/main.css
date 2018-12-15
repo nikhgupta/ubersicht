@@ -42,7 +42,9 @@
 
 ul.list { list-style: none; }
 
-i.fa.animated,[data-state="1"] .fa { color: #79a !important; }
+/*
+ i.fa.animated,[data-state="1"] .fa { color: #79a !important; }
+ */
 .fa.fa-active { color: #39d !important; }
 [data-enabled] { opacity: 0.6; }
 [data-enabled="1"] { opacity: 1.0; }

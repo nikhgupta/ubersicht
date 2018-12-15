@@ -1,5 +1,5 @@
 command: "ruby scripts/background_flickr_interesting.rb 1400 900"
-refreshFrequency: 10 * 60 * 1000
+refreshFrequency: 30 * 60 * 1000
 
 render: (output) -> """
   <div class="flickr-wallpaper"></div>
@@ -17,7 +17,7 @@ update: (output, domEl) ->
     $div.append($("<div class='shadow' />"))
     $div.append($("<div class='overlay' />"))
     $el.append($div)
-  img.src = "images/flickr/#{output}"
+  img.src = "/images/flickr/#{output}"
 
 style: """
   position: absolute;

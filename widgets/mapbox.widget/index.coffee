@@ -45,9 +45,10 @@ default_location: [26.8836669, 75.7347992]
 mapboxJS: "//api.mapbox.com/mapbox.js/v2.4.0/mapbox.js"
 mapboxCSS: "//api.mapbox.com/mapbox.js/v2.4.0/mapbox.css"
 disableInteractions: ["keyboard", "scrollWheelZoom", "boxZoom"]
-enableZoomOut: false
+enableZoomOut: true
 disableZoomControl: true
-disableLocatorControl: false
+disableLocatorControl: true
+disableGeocoderControl: true
 
 # In order to see that the map works correctly, when moving, set the following
 # to true and set a lower refreshFrequency
@@ -65,34 +66,21 @@ favoriteMapboxThemes: [
   "mapbox.dark"       # dark theme
 ]
 
-# pointsOfInterest: [
-#   {
-#     type: "Feature",
-#     geometry:
-#       type: "Point",
-#       coordinates: [ 88.3465494, 22.5743445 ]
-#     properties:
-#       title: "Custom House"
-#       description: "15/1, Strand Road, Kolkata WB"
-#       icon:
-#         html: "<div class='pin secondary'></div>"
-#         className: ""
-#         iconSize: null
-#   }
-#   {
-#     type: "Feature"
-#     geometry:
-#       type: "Point"
-#       coordinates: [88.3089369,22.5259265]
-#     properties:
-#       title: "Concor Terminal"
-#       description: "Sonarpur Rd, Majerhat, Mominpore, Kolkata WB"
-#       icon:
-#         html: "<div class='pin secondary'></div>"
-#         className: ""
-#         iconSize: null
-#   }
-# ]
+pointsOfInterest: [
+  {
+    type: "Feature",
+    geometry:
+      type: "Point",
+      coordinates: [ 75.7585713,26.868696 ]
+    properties:
+      title: "Suits Cafe"
+      description: "Office"
+      icon:
+        html: "<div class='pin secondary'></div>"
+        className: ""
+        iconSize: null
+  }
+]
 
 ################################ WIDGET START ##################################
 
@@ -165,13 +153,14 @@ setupMapbox: (el, coords) ->
   @map = L.mapbox.map(el, @mapboxTheme(), zoomControl: false, attributionControl: false)
   @map[interaction].disable() for interaction in @disableInteractions
 
-  geocoder = L.mapbox.geocoderControl('mapbox.places', autocomplete: true, position: "bottomright")
-  geocoder.addTo(@map).on 'found', (res) ->
-    $("##{el}").innerHTML = JSON.stringify(res.results.features[0])
-  geocoder.on 'select', (res) ->
-    $(".leaflet-control-mapbox-geocoder-results a").fadeOut().remove()
-    $(".leaflet-control-mapbox-geocoder-form input").val("")
-  $("leaflet-control-mapbox-geocoder-results a").on 'click', -> e.preventDefault()
+  unless @disableGeocoderControl
+    geocoder = L.mapbox.geocoderControl('mapbox.places', autocomplete: true, position: "bottomright")
+    geocoder.addTo(@map).on 'found', (res) ->
+      $("##{el}").innerHTML = JSON.stringify(res.results.features[0])
+    geocoder.on 'select', (res) ->
+      $(".leaflet-control-mapbox-geocoder-results a").fadeOut().remove()
+      $(".leaflet-control-mapbox-geocoder-form input").val("")
+    $("leaflet-control-mapbox-geocoder-results a").on 'click', -> e.preventDefault()
 
   L.control.zoom(position: 'bottomright').addTo(@map) unless @disableZoomControl
   @layer = L.mapbox.featureLayer().addTo(@map)
@@ -234,7 +223,9 @@ getLocation: (cb) ->
 
   return cb(@default_location) unless window.hasOwnProperty("geolocation")
   window.geolocation.getCurrentPosition (data) =>
+    console.log("location for mapbox widget:", data)
     cb(if data then [data.position.coords.latitude, data.position.coords.longitude] else @default_location)
+  cb(@default_location)
 
 # Note that, I store my environment variables in '~/.zshenv.local', which isn't
 # versioned, but is still loaded by interactive programs, and which contains:

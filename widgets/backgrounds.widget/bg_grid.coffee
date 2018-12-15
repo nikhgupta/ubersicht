@@ -119,7 +119,7 @@ style: """
   height:100%
   margin:0px
   padding:0px
-  z-index:-999
+  z-index:999
 
   #majorGridCanvas, #minorGridCanvas, #backgroundCanvas
     position:absolute

@@ -11,23 +11,27 @@ animationTimeout: 2000
 #   cd ./grid.widget/scripts; ruby some-script.rb
 #
 gridMap: [
-  { icon: "wifi",        enabled: 0, script: "whoami" }
-  { icon: "heartbeat",   enabled: 0, type: "output", repeat: 1000, script: "whoami" }
-  { icon: "github",      enabled: 1, type: "html",   script: "ruby scripts/github_contributions.rb" }
-  { icon: "shield",      script: "toggle-proxy.rb" }
-  { icon: "terminal",    script: "output-from-terminal.rb" }
-  { icon: "envelope",    script: "send-mail.rb" }
-  { icon: "map-marker",  script: "map-given-location.rb" }
-  { icon: "sticky-note", script: "take-note.rb" }
-  { icon: "headphones",  script: "play-songs.rb" }
-  { icon: "linux",       script: "run-kali-on-virtualbox.rb" }
-  # { icon: "lock",        script: "lock-screen.rb" }
   { icon: "th",          enabled: 1, toggle: "backgrounds.widget/bg_grid.coffee"}
   { icon: "microchip",   enabled: 1, toggle: "system.widgets/htop.coffee"}
+  { icon: "shield",      enabled: 1, script: "ruby scripts/toggle-vpn.rb SG" }
+  { icon: "lock",        enabled: 1, script: "osascript -e 'tell application \"System Events\" to keystroke \"q\" using {command down,control down}'" }
+
   { icon: "refresh",     enabled: 1, refresh: "" }
   { icon: "picture-o",   enabled: 1, timeout: 2000, script: "ruby scripts/background_change.rb" }
   { icon: "braille",     enabled: 1, toggle: "backgrounds.widget/matrix.coffee" }
   { icon: "flickr",      enabled: 1, script: "ruby scripts/background_change.rb backgrounds.widget/flickr-wall.coffee &>/dev/null" }
+
+  # { icon: "wifi",        enabled: 0, script: "whoami" }
+  # { icon: "heartbeat",   enabled: 0, type: "output", repeat: 1000, script: "whoami" }
+  # { icon: "github",      enabled: 0, type: "html",   script: "ruby scripts/github_contributions.rb" }
+  # { icon: "terminal",    enabled: 0, script: "output-from-terminal.rb" }
+
+  # { icon: "envelope",    enabled: 0, script: "send-mail.rb" }
+  # { icon: "map-marker",  enabled: 0, script: "map-given-location.rb" }
+  # { icon: "sticky-note", enabled: 0, script: "take-note.rb" }
+  # { icon: "headphones",  enabled: 0, script: "play-songs.rb" }
+
+  # { icon: "linux",       script: "run-kali-on-virtualbox.rb" }
 ]
 
 command: ""
@@ -115,7 +119,7 @@ worker: (mapping, el, togglable)->
 
 style: """
   &
-    z-index: 1
+    z-index: 1000
     position: fixed
     bottom: 50px
     left: 50px

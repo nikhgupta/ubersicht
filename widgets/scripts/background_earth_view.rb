@@ -4,7 +4,8 @@ require 'json'
 require 'open-uri'
 require 'fileutils'
 
-earth_view_dir = File.join(ENV['HOME'], "Pictures", "earth_view")
+earth_view_dir = File.join(ENV['HOME'], "Pictures", "Ubersicht", "EarthView")
+FileUtils.mkdir_p(earth_view_dir)
 json_file = File.join(earth_view_dir, "earth_view.json")
 json_url = "https://raw.githubusercontent.com/limhenry/earthview/master/wallpaper%20changer/data.json"
 
@@ -17,6 +18,7 @@ def get_name(image)
   name += image["Region"] + ", " if image["Region"] != "-"
   name += image["Country"]
   name += ".jpg"
+  name.gsub(/[^a-z0-9\.-_]/i, '-').gsub(/--+/, '-')
 end
 
 if !File.exist?(json_file) || File.stat(json_file).mtime < Time.now - 24 * 3600

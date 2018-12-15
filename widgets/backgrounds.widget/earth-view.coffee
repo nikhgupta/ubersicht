@@ -17,7 +17,7 @@ update: (output, domEl) ->
       $div.append($("<div class='shadow' />"))
       $div.append($("<div class='overlay' />"))
       $el.append($div)
-    img.src = "images/earth_view/#{output}"
+    img.src = "/images/earth_view/#{output}"
 
 style: """
   position: absolute;
