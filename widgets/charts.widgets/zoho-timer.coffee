@@ -2,13 +2,19 @@ command: "ruby scripts/zoho_timesheets.rb"
 refreshFrequency: 15*60*1000
 
 render: -> """
-  <div id="zoho-timesheets-chart" class="line chart">
+  <div class="zoho-timesheets-chart" class="line chart">
     <canvas class="zoho-chart-area" width="1200" height="60"></canvas>
+    <div class="zoho-this-month">...</div>
   </div>
 """
 
-afterRender: (domEl) ->
+addChart: (app, domEl, data, options) =>
   ctx = $(domEl).find(".zoho-chart-area")
+  window.chart = new Chart ctx, type: "bar", data: data, options: options
+  $(".zoho-this-month").on 'click', =>
+    app.run "open 'https://books.zoho.in/app' -a 'Google Chrome.app'"
+
+afterRender: (domEl) ->
   color1 = "rgba(255,255,100,0.6)"
   color2 = "rgba(150,100,100,0.6)"
   color3 = "rgba(100,100,100,0.6)"
@@ -19,24 +25,24 @@ afterRender: (domEl) ->
               { label: "cap2", data: [], fill: false, type: 'line', pointRadius: 0, borderColor: color4, backgroundColor: color4}]
   data     = { datasets: datasets }
   options  = { legend: { display: false }, scales: { xAxes: [{ type: 'time', display: false, stacked: true }], yAxes: [{ display: false, stacked: true, type: 'linear', position: 'left', ticks: { min: 0, max: 3 }}]}}
-  setTimeout (=> window.chart = new Chart ctx, type: "bar", data: data, options: options), 1000
+  setTimeout (=> @addChart(@, domEl, data, options)), 2000
 
 updateChart: (json) =>
   for key, idx in ["billable", "unbillable", "cap", "cap2"]
     window.chart.data.datasets[idx].data = json[key]
   window.chart.update()
-
+  total = json?.hours_daily
+  if total?
+    $(".zoho-this-month").html(total + " hrs")
 
 update: (output, domEl) ->
   json = JSON.parse(output)
-  console.log(json)
-  # keep the last 60 points in view
-  setTimeout (=> @updateChart(json)), 2000
+  setTimeout (=> @updateChart(json)), 3000
 
 style: """
   color: white
 
-  .chart
+  .zoho-timesheets-chart
     bottom: 0px;
     left: 0%;
     padding 0px
@@ -44,4 +50,15 @@ style: """
     position: fixed;
     box-sizing: border-box;
     align-items: center;
+    z-index 5
+
+  .zoho-this-month
+    bottom 70px
+    left: 180px;
+    padding 0px
+    position: fixed;
+    box-sizing: border-box;
+    align-items: center;
+    color rgba(250,250,250,0.4)
+    z-index 10
 """

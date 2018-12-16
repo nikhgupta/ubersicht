@@ -88,7 +88,7 @@ afterRender: (domEl) ->
 
 style: """
   &
-    z-index: 1
+    z-index: 10000
     position: fixed
     bottom: 80px
     left: 240px

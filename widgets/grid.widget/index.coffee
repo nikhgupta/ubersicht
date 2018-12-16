@@ -119,7 +119,7 @@ worker: (mapping, el, togglable)->
 
 style: """
   &
-    z-index: 1000
+    z-index: 10000
     position: fixed
     bottom: -10px
     right: 20px

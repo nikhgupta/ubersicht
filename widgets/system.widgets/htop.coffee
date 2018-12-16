@@ -15,14 +15,15 @@ update: (output, domEl) ->
   $(domEl).find("pre").html(output)
 
 style: """
-  top: 10px
-  right: 10px
+  top: 40px
+  left: 10px
   padding: 0 20px
   box-sizing: border-box
   width: 350px
   height 200px
   background rgba(0,0,0,0.4)
   -webkit-mask-image: -webkit-radial-gradient(44% 35%, closest-corner, rgba(0,0,0,0.6) 20%, rgba(0,0,0,0))
+  z-index 10
 
   pre
     color: white

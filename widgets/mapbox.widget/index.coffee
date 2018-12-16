@@ -66,26 +66,29 @@ favoriteMapboxThemes: [
   "mapbox.dark"       # dark theme
 ]
 
-pointsOfInterest: [
-  {
-    type: "Feature",
-    geometry:
-      type: "Point",
-      coordinates: [ 75.7585713,26.868696 ]
-    properties:
-      title: "Suits Cafe"
-      description: "Office"
-      icon:
-        html: "<div class='pin secondary'></div>"
-        className: ""
-        iconSize: null
-  }
-]
+# pointsOfInterest: [
+#   {
+#     type: "Feature",
+#     geometry:
+#       type: "Point",
+#       coordinates: [ 75.7585713,26.868696 ]
+#     properties:
+#       title: "Suits Cafe"
+#       description: "Office"
+#       icon:
+#         html: "<div class='pin secondary'></div>"
+#         className: ""
+#         iconSize: null
+#   }
+# ]
 
 ################################ WIDGET START ##################################
 
 render: -> """
-  <div id='mapbox' data-counter="0" data-zoom-level="#{@zoomMaxLevel}"></div>
+  <div id='mapbox' data-counter="0" data-zoom-level="#{@zoomMaxLevel}">
+  <div class="shadow top"></div>
+  <div class="shadow bottom"></div>
+  </div>
 """
 
 # Simply, injects the required CSS and JS for Mapbox. Since, this happens only
@@ -263,6 +266,7 @@ style: """
     height 100%
     position: absolute
     cursor: default
+    z-index -2
     &:after
       content: ""
       display: block
@@ -335,4 +339,18 @@ style: """
     100%
       transform scale(1.2, 1.2)
       opacity 0
+  div.shadow
+    position: absolute;
+    left: 0px;
+    width: 100%;
+    z-index -1
+    &.top
+      display: none
+      top: 0
+      height: 20%;
+      background: -webkit-linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 100%);
+    &.bottom
+      bottom: 0
+      height: 40%;
+      background: -webkit-linear-gradient(270deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 100%);
 """
