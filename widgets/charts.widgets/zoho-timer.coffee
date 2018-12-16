@@ -35,9 +35,13 @@ updateChart: (json) =>
   total = json?.hours_daily
   if total?
     $(".zoho-this-month").html(total + " hrs")
-    if total < 2
+    if total < 2 and json.billable.slice(-1)[0].y < 4
       setTimeout ( =>
         $(".zoho-notice").html("You are going slow this month. Pace up!")
+      ), 1000
+    else if json.billable.slice(-1)[0].y < 3
+      setTimeout ( =>
+        $(".zoho-notice").html("You are not done for the day!")
       ), 1000
 
 update: (output, domEl) ->
