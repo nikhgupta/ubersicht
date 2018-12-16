@@ -5,7 +5,7 @@
 # Widget has been adapted from the official `pretty-weather` widget.
 # Widget refreshes itself every 10 minutes.
 
-command: "python scripts/todo_txt_parser.py ~/Documents/todo/todo.txt"
+command: "ruby scripts/zoho_projects.rb"
 refreshFrequency: 10 * 60 * 1000
 
 render: (_) -> """

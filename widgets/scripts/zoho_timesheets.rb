@@ -17,7 +17,7 @@ end.sort_by{|d,_| d}.to_h
 min_ts = time_entries.keys.min
 max_ts = time_entries.keys.max
 
-data = (min_ts..max_ts).step(86400).map do |ts|
+data = (min_ts-86400..Time.now.to_i+86400).step(86400).map do |ts|
   date = Time.at(ts).strftime("%Y-%m-%d")
   entries = time_entries[ts] || []
   entries = entries.map do |en|
@@ -29,12 +29,15 @@ data = (min_ts..max_ts).step(86400).map do |ts|
     [billable, duration - billable, billable*project['rate']]
   end
 
-  data = 3.times.map{|i| entries.map{|col| col[i]}.sum}.push(3)
+  data = 3.times.map{|i| entries.map{|col| col[i]}.sum}.push(3, 3)
   data = data.map{|entry| {x: date, y: entry}}
 end
 
-data = %w[billable unbillable revenue cap].map.with_index do |field, idx|
+data = %w[billable unbillable revenue cap cap2].map.with_index do |field, idx|
   [field, data.map{|item| item[idx]}]
 end.to_h
+
+data["cap"][0]['y'] = 0
+data["cap"][-1]['y'] = 0
 
 puts data.to_json

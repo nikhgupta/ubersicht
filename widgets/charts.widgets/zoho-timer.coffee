@@ -1,14 +1,14 @@
 command: "ruby scripts/zoho_timesheets.rb"
-refreshFrequency: 10*1000
+refreshFrequency: 15*60*1000
 
 render: -> """
   <div id="zoho-timesheets-chart" class="line chart">
-    <canvas class="chart-area" width="1600" height="80"></canvas>
+    <canvas class="zoho-chart-area" width="1200" height="60"></canvas>
   </div>
 """
 
 afterRender: (domEl) ->
-  ctx = $(domEl).find(".chart-area")
+  ctx = $(domEl).find(".zoho-chart-area")
   color1 = "rgba(255,255,100,0.6)"
   color2 = "rgba(150,100,100,0.6)"
   color3 = "rgba(100,100,100,0.6)"
@@ -23,7 +23,7 @@ afterRender: (domEl) ->
 
 updateChart: (json) =>
   for key, idx in ["billable", "unbillable", "cap", "cap2"]
-    window.chart.data.datasets[idx].data = json[if key == "cap2" then "cap" else key]
+    window.chart.data.datasets[idx].data = json[key]
   window.chart.update()
 
 

@@ -16,7 +16,7 @@ update: (output, domEl) ->
 
 style: """
   top: 10px
-  left: 10px
+  right: 10px
   padding: 0 20px
   box-sizing: border-box
   width: 350px

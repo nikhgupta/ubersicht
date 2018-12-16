@@ -121,8 +121,8 @@ style: """
   &
     z-index: 1000
     position: fixed
-    bottom: 50px
-    left: 50px
+    bottom: -10px
+    right: 20px
     position: fixed
     height 200px
     width 200px
