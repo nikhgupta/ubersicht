@@ -26,8 +26,6 @@ style: """
   top: 0px;
   width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,0.6);
-  color: white;
 
   div.container
     position: absolute;
@@ -43,11 +41,4 @@ style: """
       width: 100%;
       height: 25%;
       background: -webkit-linear-gradient(270deg, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 100%);
-    div.overlay
-      position: absolute;
-      bottom: 0px;
-      left: 0px;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.6)
 """

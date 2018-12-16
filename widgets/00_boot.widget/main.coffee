@@ -12,7 +12,10 @@ command: ""
 refreshFrequency: false
 
 render: -> """
-  <div id="result-area"></div>
+  <div class="wrapper">
+    <div id="result-area"></div>
+    <div class="backdrop"></div>
+  </div>
 """
 
 afterRender: (domEl) ->
@@ -45,6 +48,6 @@ afterRender: (domEl) ->
     toastr.options.positionClass = "toast-bottom-right"
 
 style: """
-  top     0
-  right   0
+  top 0
+  left 0
 """

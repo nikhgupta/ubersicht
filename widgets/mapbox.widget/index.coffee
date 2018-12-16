@@ -45,7 +45,7 @@ default_location: [26.8836669, 75.7347992]
 mapboxJS: "//api.mapbox.com/mapbox.js/v2.4.0/mapbox.js"
 mapboxCSS: "//api.mapbox.com/mapbox.js/v2.4.0/mapbox.css"
 disableInteractions: ["keyboard", "scrollWheelZoom", "boxZoom"]
-enableZoomOut: true
+enableZoomOut: false
 disableZoomControl: true
 disableLocatorControl: true
 disableGeocoderControl: true

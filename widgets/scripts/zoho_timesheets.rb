@@ -52,7 +52,7 @@ else
   end
   data['cap2'] = data['cap'].map(&:clone)
   data['unbillable'] = data['revenue'] = data['billable']
-  data['hours_this_month'] = 7
+  data['hours_this_month'] = 0
 end
 
 data["cap"][0]['y'] = 0

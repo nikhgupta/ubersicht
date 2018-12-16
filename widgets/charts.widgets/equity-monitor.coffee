@@ -17,8 +17,7 @@ addChart: (app, domEl, data, options) =>
 afterRender: (domEl) ->
   color1 = "rgba(255,255,100,0.6)"
   color2 = "rgba(255,100,100,0.6)"
-  datasets = [{ label: "btc", data: [], fill: false, pointRadius: 0, borderColor: color1, backgroundColor: color1, yAxisID: "BTC"},
-              { label: "usd", data: [], fill: false, pointRadius: 0, borderColor: color2, backgroundColor: color2, yAxisID: "USD"}]
+  datasets = [{ label: "btc", data: [], fill: false, pointRadius: 0, borderColor: color1, backgroundColor: color1, yAxisID: "BTC"}]
   data     = { datasets: datasets }
   options  = { legend: { display: false }, scales: { xAxes: [{ type: 'time', display: false, }], yAxes: [{ id: "BTC", display: false, type: 'linear', position: 'left'}, { id: "USD", display: false, type: 'linear', position: 'right'}]}}
   setTimeout (=> @addChart(@, domEl, data, options)), 1000
@@ -27,9 +26,8 @@ updateChart: (json) =>
   for key, idx in ["btc"]
     window.chart.data.datasets[idx].data = json[key]
   window.chart.update()
-  btc = json?.btc?.slice(-1)?[0]?.y
-  if btc?
-    $(".equity-value").html(btc + " BTC")
+  if json.equity > 0
+    $(".equity-value").html(json.equity + " BTC (" + json.pct_gain + "%)")
 
 update: (output, domEl) ->
   json = JSON.parse(output)

@@ -31,7 +31,7 @@ afterRender: (output, domEl) ->
 style: """
   top: 0px
   left: 0px
-  z-index: -99
+  z-index: 8888
   opacity: 0.6
 
   canvas
