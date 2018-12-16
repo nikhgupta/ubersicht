@@ -5,6 +5,7 @@ render: -> """
   <div class="zoho-timesheets-chart" class="line chart">
     <canvas class="zoho-chart-area" width="1200" height="60"></canvas>
     <div class="zoho-this-month">...</div>
+    <div class="zoho-notice"></div>
   </div>
 """
 
@@ -34,6 +35,10 @@ updateChart: (json) =>
   total = json?.hours_daily
   if total?
     $(".zoho-this-month").html(total + " hrs")
+    if total < 2
+      setTimeout ( =>
+        $(".zoho-notice").html("You are going slow this month. Pace up!")
+      ), 1000
 
 update: (output, domEl) ->
   json = JSON.parse(output)
@@ -61,4 +66,18 @@ style: """
     align-items: center;
     color rgba(250,250,250,0.4)
     z-index 10
+
+  .zoho-notice
+    top 0
+    left 0
+    height 20%
+    width 100%
+    position fixed
+    display flex
+    align-items center
+    justify-content center
+    padding 20px
+    box-size border-box
+    z-index 0
+    font-size 32px
 """

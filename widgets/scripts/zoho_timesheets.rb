@@ -52,11 +52,11 @@ else
   end
   data['cap2'] = data['cap'].map(&:clone)
   data['unbillable'] = data['revenue'] = data['billable']
-  data['hours_this_month'] = 0
+  data['hours_this_month'] = 7
 end
 
 data["cap"][0]['y'] = 0
 data["cap"][-1]['y'] = 0
-data['hours_daily'] = (data['hours_this_month']/30).round(2)
-data['hours_this_month'] = data['hours_this_month'].round(2)
+data['hours_daily'] = (data['hours_this_month'].to_f/30).round(2)
+data['hours_this_month'] = data['hours_this_month'].to_f.round(2)
 puts data.to_json
