@@ -15,7 +15,7 @@ update: (output, domEl) ->
   $(domEl).find("pre").html(output)
 
 style: """
-  top: 40px
+  top: 60px
   left: 10px
   padding: 0 20px
   box-sizing: border-box

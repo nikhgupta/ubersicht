@@ -1,5 +1,5 @@
 command: "ruby scripts/ip-address.rb"
-refreshFrequency: '5s'
+refreshFrequency: '15s'
 
 render: -> """
   <div class="ip-address"></div>
@@ -7,7 +7,7 @@ render: -> """
 
 afterRender: (domEl) ->
   $(domEl).on 'click', =>
-    @run "open -a 'Activity Monitor.app'"
+    @run "open https://extreme-ip-lookup.com/json/ -a 'Google Chrome.app'"
 
 update: (output, domEl) ->
   $(domEl).html(output)

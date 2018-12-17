@@ -1,13 +1,12 @@
 #!/usr/bin/env ruby
 
 require 'httparty'
-url = "http://ip-api.com/json"
-data = HTTParty.get(url) rescue {}
-ip = data['query']
-loc = data['country']
 
-if ip
-  puts "#{ip}, #{loc}"
+url = "https://extreme-ip-lookup.com/json/"
+res = HTTParty.get(url) rescue {}
+location = [ res['city'], res['region'], res['country'] ].detect{|a| !a.strip.empty?}
+if res['query']
+  puts "Current IP: #{"%15s" % res['query']}<br/>Location: #{location}"
 else
   puts "Not Connected!!"
 end
