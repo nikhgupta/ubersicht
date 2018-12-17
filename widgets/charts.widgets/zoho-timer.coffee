@@ -5,7 +5,14 @@ render: -> """
   <div class="zoho-timesheets-chart" class="line chart">
     <canvas class="zoho-chart-area" width="1200" height="60"></canvas>
     <div class="zoho-this-month">...</div>
-    <div class="zoho-notice"></div>
+    <div class="zoho-notice">
+      <div class="main"></div>
+      <div class="sub">
+        I'm ugly. I'm very ugly.<br/>
+        Suddenly, you are having a great urge to hide me.</br>
+        Why not do some work, instead, and I am promise to go away..
+      </div>
+    </div>
   </div>
 """
 
@@ -33,16 +40,21 @@ updateChart: (json) =>
     window.chart.data.datasets[idx].data = json[key]
   window.chart.update()
   total = json?.hours_daily
+  today = json.billable?.slice(-1)?[0]?.y
   if total? and total > 0
     $(".zoho-this-month").html(json?.hours_this_month + " hrs")
-    if total < 2 and json.billable.slice(-1)[0].y < 4
+    if total < 2 and today < 4
       setTimeout ( =>
-        $(".zoho-notice").html("Are we not working this month?")
+        $(".zoho-notice .main").html("Are we not working this month?")
+        $(".zoho-notice .main, .zoho-notice .sub").fadeIn()
       ), 1000
-    else if json.billable.slice(-1)[0].y < 3
+    else if today < 3
       setTimeout ( =>
-        $(".zoho-notice").html("You are not done for the day!")
+        $(".zoho-notice .main").html("You are not done for the day!")
+        $(".zoho-notice .main, .zoho-notice .sub").fadeIn()
       ), 1000
+    else
+        $(".zoho-notice .main, .zoho-notice .sub").fadeOut()
 
 update: (output, domEl) ->
   json = JSON.parse(output)
@@ -74,14 +86,24 @@ style: """
   .zoho-notice
     top 0
     left 0
-    height 20%
+    height 25%
     width 100%
     position fixed
     display flex
     align-items center
     justify-content center
-    padding 20px
+    padding 20px 20px 20px 220px
     box-size border-box
-    z-index 0
+    z-index 11
     font-size 32px
+    background-color rgba(0,0,0,0.8)
+    .main
+      color red
+      display none
+    .sub
+      padding 40px
+      font-size 14px
+      color #ccc
+      text-align right
+
 """

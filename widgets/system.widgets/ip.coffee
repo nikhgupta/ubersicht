@@ -17,6 +17,6 @@ style: """
   left: 10px
   padding: 0 20px
   box-sizing: border-box
-  color rgba(255,255,255,1)
+  color #ccc
   z-index 10
 """
