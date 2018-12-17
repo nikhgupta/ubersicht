@@ -34,7 +34,7 @@ updateChart: (json) =>
   window.chart.update()
   total = json?.hours_daily
   if total? and total > 0
-    $(".zoho-this-month").html(total + " hrs")
+    $(".zoho-this-month").html(json?.hours_this_month + " hrs")
     if total < 2 and json.billable.slice(-1)[0].y < 4
       setTimeout ( =>
         $(".zoho-notice").html("Are we not working this month?")
@@ -63,7 +63,7 @@ style: """
 
   .zoho-this-month
     bottom 70px
-    left: 230px;
+    left: 260px;
     padding 0px
     position: fixed;
     box-sizing: border-box;

@@ -3,7 +3,7 @@ refreshFrequency: 30*60*1000
 
 render: -> """
   <div id="equity-chart" class="line chart">
-    <canvas class="equity-chart-area" width="1280" height="800"></canvas>
+    <canvas class="equity-chart-area" width="1440" height="800"></canvas>
     <div class="equity-value">...</div>
   </div>
 """
@@ -27,7 +27,7 @@ updateChart: (json) =>
     window.chart.data.datasets[idx].data = json[key]
   window.chart.update()
   if json.equity > 0
-    $(".equity-value").html(json.equity + " BTC (" + json.pct_gain + "%)")
+    $(".equity-value").html(json.equity + " BTC (" + json.time_to_1btc + ")")
 
 update: (output, domEl) ->
   json = JSON.parse(output)
@@ -37,12 +37,12 @@ update: (output, domEl) ->
 style: """
   color: white
 
-  .chart
-    bottom: 0px;
+  #equity-chart
+    top: 0px;
     left: 0px;
     padding 0px
     width 100%
-    height 100%
+    height calc(100% - 120px)
     position: fixed;
     box-sizing: border-box;
     align-items: center;
